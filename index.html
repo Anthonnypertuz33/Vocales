@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego Interactivo</title>
+<link rel="icon" href="imagenes/logo.png" type="image/x-icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-image: url('imagenes/fondo.png');
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        flex-direction: column;
+    }
+    #reload-button {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    #reload-button:hover {
+        background-color: #0056b3;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    .container {
+        background-color: white;
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    #contenedor-vocales {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+    #contenedor-imagenes {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .vocal {
+        width: 150px;
+        height: 150px;
+        border: 2px solid #ffffff;
+        border-radius: 50%;
+        margin: 10px;
+        text-align: center;
+        line-height: 150px;
+        font-size: 36px;
+        cursor: pointer;
+        background-color: #224225;
+        color: #fff;
+        transition: background-color 0.3s ease;
+    }
+    .vocal:hover {
+        background-color: #2b8021;
+    }
+    .imagen {
+        width: 80px;
+        height: 80px;
+        margin: 5px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+    .imagen:hover {
+        transform: scale(1.05);
+    }
+    h5 {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        color: #666;
+        font-size: 18px;
+    }
+</style>
+</head>
+<body>
+<audio id="punto_sound" src="sonidos/si.mp3"></audio>
+<audio id="negativo_sound" src="sonidos/negativo.mp3"></audio>
+<img src="imagenes/imgvocal.png" />
+
+<div class="container">
+    <h1>Juego de las Vocales</h1>
+    <p>Arrastra las imágenes hacia la vocal correspondiente:</p>
+</div>
+
+<h5>Puntos: <span id="puntos">0</span></h5>
+<button id="reload-button" onclick="window.location.reload();">
+    Reiniciar <i class="fas fa-sync-alt"></i>
+</button>
+
+<div id="contenedor-vocales">
+    <div class="vocal" id="vocal_a" ondrop="drop(event, 'a')" ondragover="allowDrop(event)">A</div>
+    <div class="vocal" id="vocal_e" ondrop="drop(event, 'e')" ondragover="allowDrop(event)">E</div>
+    <div class="vocal" id="vocal_i" ondrop="drop(event, 'i')" ondragover="allowDrop(event)">I</div>
+    <div class="vocal" id="vocal_o" ondrop="drop(event, 'o')" ondragover="allowDrop(event)">O</div>
+    <div class="vocal" id="vocal_u" ondrop="drop(event, 'u')" ondragover="allowDrop(event)">U</div>
+</div>
+
+<div id="contenedor-imagenes">
+    <img src="imagenes/oso.png" class="imagen" id="imagen_oso" draggable="true" ondragstart="drag(event)">
+    <img src="imagenes/elefante.png" class="imagen" id="imagen_elefante" draggable="true" ondragstart="drag(event)">
+    <img src="imagenes/ardilla.png" class="imagen" id="imagen_ardilla" draggable="true" ondragstart="drag(event)">
+    <img src="imagenes/unicornio.png" class="imagen" id="imagen_unicornio" draggable="true" ondragstart="drag(event)">
+    <img src="imagenes/iguana.png" class="imagen" id="imagen_iguana" draggable="true" ondragstart="drag(event)">
+</div>
+
+<script>
+    var puntos = 0;
+    var imagenIncorrecta = null;
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+    }
+
+    function drop(ev, vocal) {
+        ev.preventDefault();
+        var data = ev.dataTransfer.getData("text");
+        var elementoArrastrado = document.getElementById(data);
+        
+        if ((vocal === 'a' && elementoArrastrado.id === 'imagen_ardilla') ||
+            (vocal === 'e' && elementoArrastrado.id === 'imagen_elefante') ||
+            (vocal === 'i' && elementoArrastrado.id === 'imagen_iguana') ||
+            (vocal === 'o' && elementoArrastrado.id === 'imagen_oso') ||
+            (vocal === 'u' && elementoArrastrado.id === 'imagen_unicornio')) {
+            ev.target.appendChild(elementoArrastrado);
+            puntos += 10;
+            document.getElementById('puntos').textContent = puntos;
+            document.getElementById('punto_sound').play(); // Reproducir el sonido
+        } else {
+            puntos = 0;
+            document.getElementById('puntos').textContent = puntos;
+            if (imagenIncorrecta !== null) {
+                document.getElementById('contenedor-imagenes').appendChild(imagenIncorrecta); // Coloca 
+            }
+            imagenIncorrecta = elementoArrastrado; 
+            document.getElementById('negativo_sound').play(); 
+            alert("La imagen no corresponde a esta vocal. Puntuación reiniciada. Inténtalo de nuevo.");
+        }
+    }
+</script>
+
+</body>
+</html>
