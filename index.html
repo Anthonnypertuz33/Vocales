@@ -7,6 +7,45 @@
 <link rel="icon" href="imagenes/logo.png" type="image/x-icon">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <style>
+
+    /* Añade estas reglas al CSS existente */
+
+/* Imágenes */
+.imagen {
+    max-width: auto; /* Se ajustará al ancho del contenedor */
+    height: auto; /* Mantener la proporción de aspecto */
+}
+
+/* Contenedor de vocales */
+#contenedor-vocales {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: 80%; /* Ajuste el tamaño máximo según sea necesario */
+    margin: 0 auto; /* Centrar horizontalmente */
+}
+
+/* Contenedor de imágenes */
+#contenedor-imagenes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    max-width: auto; /* Ajuste el tamaño máximo según sea necesario */
+    margin: auto; /* Centrar horizontalmente */
+}
+
+/* Estilos adicionales para los contenedores de imágenes y vocales en dispositivos móviles */
+@media only screen and (max-width: auto) {
+    #contenedor-vocales {
+        max-width: auto; /* Ajustar al 100% del ancho de la pantalla en dispositivos pequeños */
+    }
+    #contenedor-imagenes {
+        max-width: auto; /* Ajustar al 100% del ancho de la pantalla en dispositivos pequeños */
+    }
+}
+ 
     body {
         font-family: 'Arial', sans-serif;
         background-image: url('imagenes/fondo.png');
